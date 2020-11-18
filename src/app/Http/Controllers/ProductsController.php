@@ -9,7 +9,7 @@ use App\Models\Product;
 class ProductsController extends Controller
 {
     public function index() {
-        $products = Product::get()->toJson(JSON_PRETTY_PRINT);
+        $products = Product::with('category')->get()->toJson(JSON_PRETTY_PRINT);
 
         return response($products, 200);
     }
@@ -33,6 +33,7 @@ class ProductsController extends Controller
         $product->price = $request->price;
         $product->isHighlight = $request->isHighlight;
         $product->image_url = $request->image_url;
+        $product->category_id = $request->category_id;
 
         $product->save();
 
@@ -50,6 +51,7 @@ class ProductsController extends Controller
             $product->price = $request->price ?? $product->price;
             $product->isHighlight = $request->isHighlight ?? $product->isHighlight;
             $product->image_url = $request->image_url ?? $product->image_url;
+            $product->category_id = $request->category_id ?? $product->category_id;
 
             $product->save();
 
@@ -63,5 +65,18 @@ class ProductsController extends Controller
         };
     }
 
-    public function delete() {}
+    public function delete($id) {
+        if(Product::where('id', $id)->exists()) {
+            $product = Product::find($id);
+            $product->delete();
+
+            return response()->json([
+                "message" => "records deleted"
+            ], 202);
+        } else {
+            return response()->json([
+                "message" => "Product not found"
+            ], 404);
+        }
+    }
 }
