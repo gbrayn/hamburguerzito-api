@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ViewController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard/createProduct');
-});
+Route::get('/', [ViewController::class, 'index']);
+Route::get('/produtos', [ViewController::class, 'dashboardProducts'])->name('index');
+Route::get('/produtos/deletar/{id}', [ViewController::class, 'deleteProduct']);
+Route::get('/produtos/novo', [ViewController::class, 'showCreateForm']);
+Route::post('/produtos/novo', [ViewController::class, 'createProduct']);
 
-Route::get('/produtos/novo', [ProductsController::class, 'create']);
