@@ -33,11 +33,11 @@
                 <label for="isHighlight" class="text">O produto é favorito?</label>
                 <div class="input-group-radio">
                     <input type="radio" name="isHighlight" id="true" value="1">
-                    <label for="true">Verdadeiro</label>
+                    <label for="true">Sim</label>
                 </div>
                 <div class="input-group-radio">
                     <input type="radio" name="isHighlight" id="false" value="2">
-                    <label for="false">Falso</label>
+                    <label for="false">Não</label>
                 </div>
             </div>
             <button type="submit">Cadastrar</button>
