@@ -3,7 +3,7 @@
 @section('content')
     <div class="content">
         <div class="container-category">
-            <h2 class="title-category">Favoritos da galera</h2>
+            <h2 class="title-category">Favoritos da galera 🤙</h2>
             <div class="content-category">
                 @foreach ($products as $product)
                 @if ($product->isHighlight == 1)
