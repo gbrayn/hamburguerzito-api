@@ -16,8 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ViewController::class, 'index']);
-Route::get('/produtos', [ViewController::class, 'dashboardProducts'])->name('index');
+Route::get('/produtos', [ViewController::class, 'dashboardProducts']);
 Route::get('/produtos/deletar/{id}', [ViewController::class, 'deleteProduct']);
-Route::get('/produtos/novo', [ViewController::class, 'showCreateForm']);
+Route::get('/produtos/novo', [ViewController::class, 'showCreateProductForm']);
 Route::post('/produtos/novo', [ViewController::class, 'createProduct']);
+Route::get('/produtos/alterar/{id}', [ViewController::class, 'showUpdateProductForm']);
+Route::post('/produtos/alterar/{id}', [ViewController::class, 'updateProduct']);
 
+Route::get('/categorias', [ViewController::class , 'dashboardCategories']);
+Route::get('/categorias/nova', [ViewController::class, 'showCreateCategoryForm']);
+Route::post('/categorias/nova', [ViewController::class, 'createCategory']);
+Route::get('/categorias/deletar/{id}', [ViewController::class, 'deleteCategory']);
+Route::get('/categorias/alterar/{id}', [ViewController::class, 'showUpdateCategoryForm']);
+Route::post('/categorias/alterar/{id}', [ViewController::class, 'updateCategory']);
