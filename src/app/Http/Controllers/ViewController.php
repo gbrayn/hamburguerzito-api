@@ -27,13 +27,13 @@ class ViewController extends Controller
             $product = Product::find($id);
             $product->delete();
 
-            return redirect('/produtos');
+            return redirect('/produtos')->with(['success' => 1, 'message' => 'Produto deletado com sucesso.']);
         } else {
-            return redirect('/produtos');
+            return redirect('/produtos')->with(['success' => 0, 'message' => 'Erro ao deletar o produto.']);
         }
     }
 
-    public function showCreateForm() {
+    public function showCreateProductForm() {
         $categories = Category::get();
 
         return view('pages/createProduct', ['categories' => $categories]);
@@ -52,4 +52,88 @@ class ViewController extends Controller
 
         return redirect('/produtos');
     }
+
+    public function showUpdateProductForm($id) {
+        $product = Product::find($id);
+        $categories = Category::get();
+
+        return view('pages/updateProduct', ['product' => $product, 'categories' => $categories]);
+    }
+
+    public function updateProduct(Request $request, $id) {
+        if(Product::where('id', $id)->exists()) {
+            $product = Product::find($id);
+
+            $product->name = $request->name ?? $product->name;
+            $product->description = $request->description ?? $product->description;
+            $product->price = $request->price ?? $product->price;
+            $product->isHighlight = (int)$request->isHighlight ?? $product->isHighlight;
+            $product->image_url = $request->image_url ?? $product->image_url;
+            $product->category_id = $request->category_id ?? $product->category_id;
+
+            $product->save();
+
+            return redirect('/produtos');
+        }
+    }
+
+    public function dashboardCategories() {
+        $categories = Category::get();
+
+        return view('pages/dashboardCategories', ['categories' => $categories]);
+    }
+
+    public function showCreateCategoryForm() {
+        return view('pages/createCategory');
+    }
+
+    public function createCategory(Request $request) {
+        $category = new Category;
+        $category->name = $request->name;
+
+        $category->save();
+
+        return redirect('/categorias');
+    }
+
+    public function updateCategory(Request $request, $id) {
+        if(Category::where('id', $id)->exists()) {
+            $category = Category::find($id);
+
+            $category->name = $request->name ?? $category->name;
+
+            $category->save();
+
+            return redirect('/categorias');
+        }
+    }
+
+    public function deleteCategory($id) {
+        if(Category::where('id', $id)->exists()) {
+            $category = Category::find($id);
+            $products = Product::get();
+            $counter = 0;
+
+            foreach ($products as $product) {
+                if ($product->category->id !== $category->id) {
+                    $counter++;
+                }
+            }
+
+            if($counter == count($products)) {
+                $category->delete();
+            }
+
+            return redirect('/categorias');
+        } else {
+            return redirect('/categorias');
+        }
+    }
+
+    public function showUpdateCategoryForm($id) {
+        $category = Category::find($id);
+
+        return view('pages/updateCategory', ['category' => $category]);
+    }
+
 }
