@@ -40,17 +40,21 @@ class ViewController extends Controller
     }
 
     public function createProduct(Request $request) {
-        $product = new Product;
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->isHighlight = (int)$request->isHighlight;
-        $product->image_url = $request->image_url;
-        $product->category_id = $request->category_id;
+        try {
+            $product = new Product;
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->isHighlight = (int)$request->isHighlight;
+            $product->image_url = $request->image_url;
+            $product->category_id = $request->category_id;
 
-        $product->save();
+            $product->save();
 
-        return redirect('/produtos');
+            return redirect('/produtos')->with(['success' => 1, 'message' => 'Produto criado com sucesso.']);
+        } catch (\Throwable $th) {
+            return redirect('/produtos')->with(['success' => 0, 'message' => 'Erro ao criar produto.']);
+        }
     }
 
     public function showUpdateProductForm($id) {
@@ -61,19 +65,25 @@ class ViewController extends Controller
     }
 
     public function updateProduct(Request $request, $id) {
-        if(Product::where('id', $id)->exists()) {
-            $product = Product::find($id);
+        try {
+            if(Product::where('id', $id)->exists()) {
+                $product = Product::find($id);
 
-            $product->name = $request->name ?? $product->name;
-            $product->description = $request->description ?? $product->description;
-            $product->price = $request->price ?? $product->price;
-            $product->isHighlight = (int)$request->isHighlight ?? $product->isHighlight;
-            $product->image_url = $request->image_url ?? $product->image_url;
-            $product->category_id = $request->category_id ?? $product->category_id;
+                $product->name = $request->name ?? $product->name;
+                $product->description = $request->description ?? $product->description;
+                $product->price = $request->price ?? $product->price;
+                $product->isHighlight = (int)$request->isHighlight ?? $product->isHighlight;
+                $product->image_url = $request->image_url ?? $product->image_url;
+                $product->category_id = $request->category_id ?? $product->category_id;
 
-            $product->save();
+                $product->save();
 
-            return redirect('/produtos');
+                return redirect('/produtos')->with(['success' => 1, 'message' => 'Produto alterado com sucesso.']);
+            } else {
+                return redirect('/produtos')->with(['success' => 0, 'message' => 'Erro ao alterar o produto.']);
+            }
+        } catch (\Throwable $th) {
+            return redirect('/produtos')->with(['success' => 0, 'message' => 'Erro ao alterar o produto.']);
         }
     }
 
@@ -88,46 +98,63 @@ class ViewController extends Controller
     }
 
     public function createCategory(Request $request) {
-        $category = new Category;
-        $category->name = $request->name;
-
-        $category->save();
-
-        return redirect('/categorias');
-    }
-
-    public function updateCategory(Request $request, $id) {
-        if(Category::where('id', $id)->exists()) {
-            $category = Category::find($id);
-
-            $category->name = $request->name ?? $category->name;
+        try {
+            $category = new Category;
+            $category->name = $request->name;
 
             $category->save();
 
-            return redirect('/categorias');
+            return redirect('/categorias')->with(['success' => 1, 'message' => 'Categoria criada com sucesso.']);
+        } catch (\Throwable $th) {
+            return redirect('/categorias')->with(['success' => 0, 'message' => 'Erro ao criar categoria.']);
         }
     }
 
-    public function deleteCategory($id) {
-        if(Category::where('id', $id)->exists()) {
-            $category = Category::find($id);
-            $products = Product::get();
-            $counter = 0;
+    public function updateCategory(Request $request, $id) {
+        try {
+            if(Category::where('id', $id)->exists()) {
+                $category = Category::find($id);
 
-            foreach ($products as $product) {
-                if ($product->category->id !== $category->id) {
-                    $counter++;
-                }
+                $category->name = $request->name ?? $category->name;
+
+                $category->save();
+
+                return redirect('/categorias')->with(['success' => 1, 'message' => 'Categoria alterada com sucesso.']);
+            } else {
+                return redirect('/categorias')->with(['success' => 0, 'message' => 'Erro ao alterar categoria.']);
             }
-
-            if($counter == count($products)) {
-                $category->delete();
-            }
-
-            return redirect('/categorias');
-        } else {
-            return redirect('/categorias');
+        } catch (\Throwable $th) {
+            return redirect('/categorias')->with(['success' => 0, 'message' => 'Erro ao alterar categoria.']);
         }
+
+    }
+
+    public function deleteCategory($id) {
+        try {
+            if(Category::where('id', $id)->exists()) {
+                $category = Category::find($id);
+                $products = Product::get();
+                $counter = 0;
+
+                foreach ($products as $product) {
+                    if ($product->category->id !== $category->id) {
+                        $counter++;
+                    }
+                }
+
+                if($counter == count($products)) {
+                    $category->delete();
+
+                    return redirect('/categorias')->with(['success' => 1, 'message' => 'Categoria deletada com sucesso.']);
+                }
+
+            } else {
+                return redirect('/categorias')->with(['success' => 0, 'message' => 'Erro ao deletar categoria.']);
+            }
+        } catch (\Throwable $th) {
+            return redirect('/categorias')->with(['success' => 0, 'message' => 'Erro ao deletar categoria.']);
+        }
+
     }
 
     public function showUpdateCategoryForm($id) {
