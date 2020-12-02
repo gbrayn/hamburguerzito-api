@@ -7,6 +7,16 @@
         <i class="fas fa-plus"></i>
         Nova Categoria
     </a>
+    @if (Session::get('success') === 1)
+        <div class="alert alert-success">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    @if (Session::get('success') === 0)
+        <div class="alert alert-danger">
+            {{ Session::get('message') }}
+        </div>
+    @endif
         <table>
             <tr>
                 <th>Código</th>

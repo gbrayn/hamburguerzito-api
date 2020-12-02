@@ -52,5 +52,42 @@
             justify-content: flex-start
         }
 
+        @keyframes myAnimation{
+            0%{
+                opacity: 1;
+            }
+            100%{
+                display: none;
+                opacity: 0;
+            }
+        }
+
+        .alert {
+            width: 15rem;
+            height: 5rem;
+            position: fixed;
+            right: 20px;
+            border-radius: 1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: #FAFAFA;
+            font-weight: 600;
+            padding: 1rem;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+            animation-name: myAnimation;
+            animation-duration: 5s;
+            animation-fill-mode: forwards;
+        }
+
+        .alert-success {
+            background: #23f97c !important;
+        }
+
+        .alert-danger {
+            background: #F92351;
+        }
     </style>
 </html>

@@ -7,7 +7,6 @@
         <i class="fas fa-plus"></i>
         Novo Produto
     </a>
-    {{ Session::get('success') }}
     @if (Session::get('success') === 1)
         <div class="alert alert-success">
             {{ Session::get('message') }}
@@ -124,46 +123,6 @@
         .content .btn-new:hover {
             background: #2387f9b2;
             transition: all ease 0.5s;
-        }
-
-        @keyframes myAnimation{
-        0%{
-            opacity: 1;
-        }
-        50%{
-            opacity: 0.5;
-        }
-        100%{
-            display: none;
-            opacity: 0;
-        }
-        }
-
-        .alert {
-            width: 15rem;
-            height: 5rem;
-            position: fixed;
-            right: 20px;
-            border-radius: 1em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            color: #FAFAFA;
-            font-weight: 600;
-            padding: 1rem;
-
-            animation-name: myAnimation;
-            animation-duration: 2000ms;
-            animation-fill-mode: forwards;
-        }
-
-        .alert-success {
-            background: #23f97c !important;
-        }
-
-        .alert-danger {
-            background: #F92351;
         }
     </style>
 @endsection
